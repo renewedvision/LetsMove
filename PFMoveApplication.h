@@ -26,7 +26,13 @@ void PFMoveToApplicationsFolderIfNecessary(void);
  This can be used to work around a crash with apps that terminate after last window is closed.
  See https://github.com/potionfactory/LetsMove/issues/64 for details. */
 BOOL PFMoveIsInProgress(void);
+	
+/**
+ Relaunches the application from it's current location
+ */
+void PFRelaunchInPlace(void);
 
+	
 #ifdef __cplusplus
 }
 #endif

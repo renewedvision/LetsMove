@@ -231,6 +231,11 @@ BOOL PFMoveIsInProgress() {
     return MoveInProgress;
 }
 
+void PFRelaunchInPlace(void) {
+	NSString *appPath = NSBundle.mainBundle.bundlePath;
+	Relaunch(appPath);
+}
+
 #pragma mark -
 #pragma mark Helper Functions
 

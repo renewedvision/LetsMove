@@ -247,6 +247,7 @@
 				sv,
 				ca,
 				sk,
+				mk,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* LetsMove */;
 			projectDirPath = "";
