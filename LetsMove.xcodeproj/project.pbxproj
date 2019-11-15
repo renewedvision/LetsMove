@@ -34,7 +34,6 @@
 		A120E7F710630B160045BE3F /* PFMoveApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFMoveApplication.m; sourceTree = "<group>"; };
 		A1339024192F8183009ABCE2 /* cs */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/MoveApplication.strings; sourceTree = "<group>"; };
 		A17CADE6192F7E14008A209F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A17CADE8192F7E14008A209F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A17CADEA192F7E14008A209F /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MoveApplication.strings; sourceTree = "<group>"; };
 		A17ED68F1A00BA8B0032BA5B /* sv */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/MoveApplication.strings; sourceTree = "<group>"; };
 		A19B38C1192F81C200F1CCA3 /* da */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/MoveApplication.strings; sourceTree = "<group>"; };
@@ -57,6 +56,7 @@
 		B2A84662197EAB85008A4ACA /* sr */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = sr; path = sr.lproj/MoveApplication.strings; sourceTree = "<group>"; };
 		B5B5D108198940DF0074DBCE /* pl */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/MoveApplication.strings; sourceTree = "<group>"; };
 		C3A14200EF754221ACE32119 /* mk */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = mk; path = mk.lproj/MoveApplication.strings; sourceTree = "<group>"; };
+		D0BFA346237F48CF003C7754 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		D2CC8CA81B90F10700F763DF /* sk */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/MoveApplication.strings; sourceTree = "<group>"; };
 		F146F8271CE7094400233A9B /* LetsMove.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LetsMove.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F146F82F1CE7097500233A9B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -212,7 +212,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1110;
 				TargetAttributes = {
 					F146F8261CE7094400233A9B = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -248,6 +248,7 @@
 				ca,
 				sk,
 				mk,
+				Base,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* LetsMove */;
 			projectDirPath = "";
@@ -313,7 +314,7 @@
 		A17CADE7192F7E14008A209F /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A17CADE8192F7E14008A209F /* en */,
+				D0BFA346237F48CF003C7754 /* Base */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -356,6 +357,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -374,6 +376,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -440,7 +443,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
@@ -497,7 +500,7 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 			};
 			name = Release;
 		};
