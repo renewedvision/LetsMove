@@ -52,8 +52,8 @@ static BOOL IsApplicationAtPathNested(NSString *path);
 static NSString *ContainingDiskImageDevice(NSString *path);
 static BOOL Trash(NSString *path);
 static BOOL DeleteOrTrash(NSString *path);
-static BOOL AuthorizedInstall(NSString *srcPath, NSString *dstPath, BOOL moveSource, BOOL *canceled);
-static BOOL CopyBundle(NSString *srcPath, NSString *dstPath, BOOL moveSource);
+static BOOL AuthorizedInstall(NSString *srcPath, NSString *dstPath, BOOL *canceled);
+static BOOL CopyBundle(NSString *srcPath, NSString *dstPath);
 static NSString *ShellQuotedString(NSString *string);
 static void Relaunch(NSString *destinationPath);
 
@@ -145,8 +145,6 @@ void PFMoveToApplicationsFolderIfNecessary(void) {
 	if (![NSApp isActive]) {
 		[NSApp activateIgnoringOtherApps:YES];
 	}
-	
-	BOOL installTypeMove = diskImageDevice == nil;
 
 	if ([alert runModal] == NSAlertFirstButtonReturn) {
 		NSLog(@"INFO -- Moving myself to the Applications folder");
@@ -155,7 +153,7 @@ void PFMoveToApplicationsFolderIfNecessary(void) {
 		if (needAuthorization) {
 			BOOL authorizationCanceled;
 
-			if (!AuthorizedInstall(bundlePath, destinationPath, installTypeMove, &authorizationCanceled)) {
+			if (!AuthorizedInstall(bundlePath, destinationPath, &authorizationCanceled)) {
 				if (authorizationCanceled) {
 					NSLog(@"INFO -- Not moving because user canceled authorization");
 					MoveInProgress = NO;
@@ -184,7 +182,7 @@ void PFMoveToApplicationsFolderIfNecessary(void) {
 				}
 			}
 
- 			if (!CopyBundle(bundlePath, destinationPath, installTypeMove)) {
+ 			if (!CopyBundle(bundlePath, destinationPath)) {
 				NSLog(@"ERROR -- Could not copy myself to %@", destinationPath);
 				goto fail;
 			}
@@ -391,7 +389,7 @@ static BOOL DeleteOrTrash(NSString *path) {
 	return Trash(path);
 }
 
-static BOOL AuthorizedInstall(NSString *srcPath, NSString *dstPath, BOOL moveSource, BOOL *canceled) {
+static BOOL AuthorizedInstall(NSString *srcPath, NSString *dstPath, BOOL *canceled) {
 	if (canceled) *canceled = NO;
 
 	// Make sure that the destination path is an app bundle. We're essentially running 'sudo rm -rf'
@@ -449,33 +447,19 @@ static BOOL AuthorizedInstall(NSString *srcPath, NSString *dstPath, BOOL moveSou
 		if (pid == -1 || !WIFEXITED(status)) goto fail; // We don't care about exit status as the destination most likely does not exist
 	}
 
-	if (moveSource)
+	// Copy
 	{
-		// move
-		char *args[] = {(char *)[srcPath fileSystemRepresentation], (char *)[dstPath fileSystemRepresentation], NULL};
-		err = security_AuthorizationExecuteWithPrivileges(myAuthorizationRef, "/bin/mv", kAuthorizationFlagDefaults, args, NULL);
-		if (err != errAuthorizationSuccess) goto fail;
-		
-		// Wait until it's done
-		do
-			pid = wait(&status);
-		while (pid == -1 && errno == EINTR);
-		if (pid == -1 || !WIFEXITED(status) || WEXITSTATUS(status)) goto fail;
-
-	} else
-	{
-		// Copy
 		char *args[] = {"-pR", (char *)[srcPath fileSystemRepresentation], (char *)[dstPath fileSystemRepresentation], NULL};
 		err = security_AuthorizationExecuteWithPrivileges(myAuthorizationRef, "/bin/cp", kAuthorizationFlagDefaults, args, NULL);
 		if (err != errAuthorizationSuccess) goto fail;
-		
+
 		// Wait until it's done
 		do
 			pid = wait(&status);
 		while (pid == -1 && errno == EINTR);
 		if (pid == -1 || !WIFEXITED(status) || WEXITSTATUS(status)) goto fail;
 	}
-	
+
 	AuthorizationFree(myAuthorizationRef, kAuthorizationFlagDefaults);
 	return YES;
 
@@ -484,28 +468,16 @@ fail:
 	return NO;
 }
 
-static BOOL CopyBundle(NSString *srcPath, NSString *dstPath, BOOL moveSource) {
+static BOOL CopyBundle(NSString *srcPath, NSString *dstPath) {
 	NSFileManager *fm = [NSFileManager defaultManager];
 	NSError *error = nil;
 
-	if (moveSource)
-	{
-		if ([fm moveItemAtPath:srcPath toPath:dstPath error:&error]) {
-			return YES;
-		}
-		else {
-			NSLog(@"ERROR -- Could not move '%@' to '%@' (%@)", srcPath, dstPath, error);
-			return NO;
-		}
-	} else
-	{
-		if ([fm copyItemAtPath:srcPath toPath:dstPath error:&error]) {
-			return YES;
-		}
-		else {
-			NSLog(@"ERROR -- Could not copy '%@' to '%@' (%@)", srcPath, dstPath, error);
-			return NO;
-		}
+	if ([fm copyItemAtPath:srcPath toPath:dstPath error:&error]) {
+		return YES;
+	}
+	else {
+		NSLog(@"ERROR -- Could not copy '%@' to '%@' (%@)", srcPath, dstPath, error);
+		return NO;
 	}
 }
 
